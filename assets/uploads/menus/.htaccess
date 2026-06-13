@@ -1,0 +1,14 @@
+# Matikan eksekusi script PHP di folder ini untuk mencegah RCE via malicious upload
+<FilesMatch "\.(php|php5|php4|php3|phtml|phpt)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Opsi lain: Matikan engine PHP di dalam direktori ini (Apache specific)
+php_flag engine off
+
+# Hanya izinkan format gambar
+<FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+    Order allow,deny
+    Allow from all
+</FilesMatch>

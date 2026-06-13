@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="draw.io" version="24.0.0" type="device">
+  <diagram name="Halaman Login" id="diag-login">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="2" value="START" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontStyle=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="30" y="165" width="70" height="50" as="geometry"/></mxCell>
+        <mxCell id="3" value="Membuka Halaman Login" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="130" y="160" width="140" height="60" as="geometry"/></mxCell>
+        <mxCell id="4" value="Merender Form Login &amp; Generate CSRF Token" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="300" y="160" width="150" height="60" as="geometry"/></mxCell>
+        <mxCell id="5" value="Input Username &amp; Password" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="480" y="160" width="140" height="60" as="geometry"/></mxCell>
+        <mxCell id="6" value="Klik Tombol Login (POST)" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="650" y="160" width="130" height="60" as="geometry"/></mxCell>
+        <mxCell id="7" value="Verifikasi CSRF Token" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="810" y="160" width="130" height="60" as="geometry"/></mxCell>
+        <mxCell id="8" value="Kredensial Valid di DB?" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="970" y="150" width="140" height="80" as="geometry"/></mxCell>
+        <mxCell id="9" value="Regenerate Session ID (Anti Fixation)" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="1140" y="160" width="160" height="60" as="geometry"/></mxCell>
+        <mxCell id="10" value="Set Session Variables (user_id, username, role)" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="1330" y="160" width="160" height="60" as="geometry"/></mxCell>
+        <mxCell id="11" value="Redirect Sesuai Role (admin / kasir)" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="1520" y="160" width="150" height="60" as="geometry"/></mxCell>
+        <mxCell id="12" value="END" style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000;fontColor=#ffffff;strokeColor=#000000;fontStyle=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="1700" y="165" width="70" height="50" as="geometry"/></mxCell>
+        <mxCell id="13" value="Tampil Pesan Error Login" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="970" y="320" width="140" height="60" as="geometry"/></mxCell>
+        <mxCell id="20" edge="1" source="2" target="3" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="21" edge="1" source="3" target="4" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="22" edge="1" source="4" target="5" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="23" edge="1" source="5" target="6" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="24" edge="1" source="6" target="7" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="25" edge="1" source="7" target="8" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="26" value="Ya" edge="1" source="8" target="9" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="27" edge="1" source="9" target="10" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="28" edge="1" source="10" target="11" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="29" edge="1" source="11" target="12" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="30" value="Tidak" edge="1" source="8" target="13" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="31" edge="1" source="13" target="5" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points"><mxPoint x="1040" y="410"/><mxPoint x="550" y="410"/></Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

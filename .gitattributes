@@ -1,0 +1,8 @@
+# Memberitahu GitHub Linguist bahwa semua .php adalah PHP, bukan Hack
+*.php linguist-language=PHP
+
+# Kecualikan asset dan dokumentasi dari statistik bahasa
+*.css linguist-documentation
+*.sql linguist-documentation
+docs/** linguist-documentation
+database/** linguist-documentation

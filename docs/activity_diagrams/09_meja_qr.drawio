@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="draw.io" version="24.0.0" type="device">
+  <diagram name="Meja dan QR Code" id="diag-tables">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/><mxCell id="1" parent="0"/>
+        <mxCell id="2" value="START" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontStyle=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="30" y="165" width="70" height="50" as="geometry"/></mxCell>
+        <mxCell id="3" value="Buka Halaman Meja &amp; QR Code" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="130" y="160" width="150" height="60" as="geometry"/></mxCell>
+        <mxCell id="4" value="Fetch Semua Meja dari DB" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="310" y="160" width="140" height="60" as="geometry"/></mxCell>
+        <mxCell id="5" value="Generate QR URL via api.qrserver.com per Meja" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="480" y="160" width="190" height="60" as="geometry"/></mxCell>
+        <mxCell id="6" value="Render Grid Meja + QR Code" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="700" y="160" width="150" height="60" as="geometry"/></mxCell>
+        <mxCell id="7" value="Pilih Aksi?" style="rhombus;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="880" y="150" width="120" height="80" as="geometry"/></mxCell>
+        <mxCell id="8" value="Input Nomor Meja Baru" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="1030" y="50" width="140" height="60" as="geometry"/></mxCell>
+        <mxCell id="9" value="INSERT INTO tables" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="1200" y="50" width="130" height="60" as="geometry"/></mxCell>
+        <mxCell id="10" value="Load Data &amp; Edit Nomor Meja" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="1030" y="160" width="150" height="60" as="geometry"/></mxCell>
+        <mxCell id="11" value="UPDATE tables SET nomor_meja" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="1210" y="160" width="170" height="60" as="geometry"/></mxCell>
+        <mxCell id="12" value="Konfirmasi Hapus" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="1030" y="270" width="140" height="60" as="geometry"/></mxCell>
+        <mxCell id="13" value="DELETE FROM tables" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="1200" y="270" width="140" height="60" as="geometry"/></mxCell>
+        <mxCell id="14" value="Download QR PNG via Browser" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="1030" y="380" width="150" height="60" as="geometry"/></mxCell>
+        <mxCell id="15" value="Flash Message &amp; Redirect" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="1410" y="160" width="150" height="60" as="geometry"/></mxCell>
+        <mxCell id="16" value="END" style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000;fontColor=#ffffff;strokeColor=#000000;fontStyle=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="1590" y="165" width="70" height="50" as="geometry"/></mxCell>
+        <mxCell id="20" edge="1" source="2" target="3" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="21" edge="1" source="3" target="4" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="22" edge="1" source="4" target="5" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="23" edge="1" source="5" target="6" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="24" edge="1" source="6" target="7" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="25" value="Tambah" edge="1" source="7" target="8" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="26" value="Edit" edge="1" source="7" target="10" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="27" value="Hapus" edge="1" source="7" target="12" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="28" value="Download QR" edge="1" source="7" target="14" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="29" edge="1" source="8" target="9" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="30" edge="1" source="10" target="11" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="31" edge="1" source="12" target="13" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="32" edge="1" source="9" target="15" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="33" edge="1" source="11" target="15" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="34" edge="1" source="13" target="15" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="35" edge="1" source="14" target="15" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="36" edge="1" source="15" target="16" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
