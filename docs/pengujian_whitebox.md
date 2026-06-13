@@ -9,97 +9,102 @@ Dokumen ini berisi pengujian *White Box* untuk tiga fitur utama pada sistem peme
 
 ## 🔑 1. Pengujian White Box: Login (`auth/login.php`)
 
-### A. Flowchart & Flowgraph
-Alur logika backend pada script login didefinisikan ke dalam bagan alur (*flowchart*) dan graf alur (*flowgraph*) berikut:
+Sesuai dengan alur yang disederhanakan, pengujian *White Box* untuk proses login berfokus pada validasi input, pencarian user, verifikasi password, dan pengalihan (redirect) berdasarkan role.
 
+### A. Flowchart & Flowgraph
+
+#### 📊 Flowchart Proses Login
 ```mermaid
 graph TD
-    Node1((1: Start Page Load)) --> Node2{2: Apakah isLoggedIn?}
-    Node2 -- Ya --> Node3{3: Apakah role admin?}
-    Node2 -- Tidak --> Node6{6: Apakah request METHOD == POST?}
+    Node1([1. Mulai dan Input]) --> Node2{2. Input Kosong?}
+    Node2 -- Ya --> Node3[3. Set Error: Input Kosong]
+    Node2 -- Tidak --> Node4{4. User Ditemukan?}
     
-    Node3 -- Ya --> Node4[4: Redirect ke admin/index.php]
-    Node3 -- Tidak --> Node5[5: Redirect ke kasir/index.php]
+    Node4 -- Tidak --> Node5[5. Set Error: User Tidak Ditemukan]
+    Node4 -- Ya --> Node6{6. Password Cocok?}
     
-    Node4 --> ExitNode(((Exit)))
-    Node5 --> ExitNode
+    Node6 -- Tidak --> Node7[7. Set Error: Password Salah]
+    Node6 -- Ya --> Node8{8. Role Admin?}
     
-    Node6 -- Ya --> Node7[7: Verify CSRF & Ambil Input]
-    Node6 -- Tidak --> Node17[17: Render HTML Halaman Login]
+    Node8 -- Ya --> Node9[9. Redirect Dashboard Admin]
+    Node8 -- Tidak --> Node10[10. Redirect Dashboard Kasir]
     
-    Node7 --> Node8{8: Apakah username/password kosong?}
-    Node8 -- Ya --> Node9[9: Set error 'Wajib diisi']
-    Node8 -- Tidak --> Node10[10: Query ke DB untuk cari user]
+    Node3 --> Node11(((11. Selesai)))
+    Node5 --> Node11
+    Node7 --> Node11
+    Node9 --> Node11
+    Node10 --> Node11
+```
+
+#### 📈 Flowgraph
+```mermaid
+graph TD
+    1((1)) --> 2((2))
+    2 -- Ya --> 3((3))
+    2 -- Tidak --> 4((4))
     
-    Node9 --> Node17
+    4 -- Tidak --> 5((5))
+    4 -- Ya --> 6((6))
     
-    Node10 --> Node11{11: Apakah user ditemukan & password cocok?}
-    Node10 -- Exception --> Node16[16: Catch Exception & Set error sistem]
+    6 -- Tidak --> 7((7))
+    6 -- Ya --> 8((8))
     
-    Node11 -- Ya --> Node12{12: Regenerate Session & Apakah role admin?}
-    Node11 -- Tidak --> Node15[15: Set error 'Username/password salah']
+    8 -- Ya --> 9((9))
+    8 -- Tidak --> 10((10))
     
-    Node12 -- Ya --> Node13[13: Redirect ke admin/index.php]
-    Node12 -- Tidak --> Node14[14: Redirect ke kasir/index.php]
-    
-    Node13 --> ExitNode
-    Node14 --> ExitNode
-    Node15 --> Node17
-    Node16 --> Node17
-    
-    Node17 --> ExitNode
+    3 --> 11((11))
+    5 --> 11((11))
+    7 --> 11((11))
+    9 --> 11((11))
+    10 --> 11((11))
 ```
 
 ### B. Tabel Keterangan Node
-| Node | Deskripsi |
-| :--- | :--- |
-| **1** | Memulai load halaman login, inisialisasi session. |
-| **2** | Pengecekan kondisi: `isLoggedIn()`. |
-| **3** | Pengecekan kondisi: `$_SESSION['user_role'] === 'admin'`. |
-| **4** | Eksekusi redirect ke `../admin/index.php` bagi user yang sudah login sebagai admin. |
-| **5** | Eksekusi redirect ke `../kasir/index.php` bagi user yang sudah login sebagai kasir. |
-| **6** | Pengecekan kondisi: `$_SERVER['REQUEST_METHOD'] === 'POST'`. |
-| **7** | Eksekusi verifikasi CSRF token, pembersihan spasi username dan pengambilan data password. |
-| **8** | Pengecekan kondisi: `empty($username) || empty($password)`. |
-| **9** | Penentuan nilai `$error = 'Username dan password wajib diisi.'`. |
-| **10** | Eksekusi Query pencarian user di database: `SELECT * FROM users WHERE username = :username`. |
-| **11** | Pengecekan kondisi: `$user` ditemukan dan `password_verify($password, $user['password'])` bernilai true. |
-| **12** | Eksekusi `session_regenerate_id()`, setup session role, dan cek kondisi `role === 'admin'`. |
-| **13** | Eksekusi redirect ke `../admin/index.php` setelah sukses login admin. |
-| **14** | Eksekusi redirect ke `../kasir/index.php` setelah sukses login kasir. |
-| **15** | Penentuan nilai `$error = 'Username atau password salah.'`. |
-| **16** | Blok catch: Menangani error database (PDOException) dan set pesan error sistem. |
-| **17** | Merender tampilan halaman HTML login dengan form input serta pesan error jika ada. |
+| Node | Logika / Aktivitas | Deskripsi |
+| :---: | :--- | :--- |
+| **1** | `Mulai & Input` | Sistem menerima input *username* dan *password* dari pengguna. |
+| **2** | `if (empty($user) \|\| empty($pass))` | Node Keputusan: Pengecekan apakah input kosong. |
+| **3** | `Set Error` | Jika kosong (Ya), sistem mengatur pesan error validasi. |
+| **4** | `if ($user_ditemukan)` | Node Keputusan: Pengecekan apakah username ada di database. |
+| **5** | `Set Error` | Jika tidak ditemukan (Tidak), sistem mengatur pesan error user tidak terdaftar. |
+| **6** | `if (password_verify(...))` | Node Keputusan: Pengecekan kecocokan password. |
+| **7** | `Set Error` | Jika salah (Tidak), sistem mengatur pesan error password salah. |
+| **8** | `if ($role == 'admin')` | Node Keputusan: Pengecekan role pengguna yang berhasil login. |
+| **9** | `Redirect` | Jika Admin (Ya), sistem mengarahkan ke dashboard Admin. |
+| **10** | `Redirect` | Jika Kasir (Tidak), sistem mengarahkan ke dashboard Kasir. |
+| **11** | `Selesai` | Akhir proses (menampilkan halaman dengan pesan error atau berhasil masuk). |
 
-### C. Perhitungan Cyclomatic Complexity (CC)
-Berdasarkan rumus kompleksitas siklomatis graf alur $G$:
-* **Jumlah Sisi (Edges, E)** = 24
-* **Jumlah Node (N)** = 18 (termasuk Exit)
+### C. Perhitungan Cyclomatic Complexity (CC) & Jumlah Region
+Berdasarkan visualisasi flowgraph di atas, kita dapat menghitung kompleksitas siklomatisnya:
+
+* **Jumlah Sisi (Edges, E)** = 14
+* **Jumlah Node (N)** = 11
 * **Rumus**: $V(G) = E - N + 2$
-* **Perhitungan**: $V(G) = 24 - 18 + 2 = 8$
+* **Perhitungan**: $V(G) = 14 - 11 + 2 = 5$
 
-Metode Predicate Node ($V(G) = P + 1$ di mana $P$ adalah node keputusan):
-1. Node 2 (`isLoggedIn()`)
-2. Node 3 (`role === 'admin'`)
-3. Node 6 (`REQUEST_METHOD === 'POST'`)
-4. Node 8 (`empty(username) || empty(password)`)
-5. Node 10 (Try/Catch - Database Error check)
-6. Node 11 (`user ditemukan & password cocok`)
-7. Node 12 (`role === 'admin'` sesudah login)
-* **Jumlah Predikat (P)** = 7
-* **Perhitungan**: $V(G) = 7 + 1 = 8$
+Metode *Predicate Node* (Node Keputusan):
+* Terdapat 4 Predicate Node (Node 2, 4, 6, dan 8).
+* **Rumus**: $V(G) = P + 1$
+* **Perhitungan**: $V(G) = 4 + 1 = 5$
 
-*Maka, terdapat **8 Jalur Independen**.*
+**Jumlah Region (Daerah)**:
+* **Jumlah Region = 5** (Terdapat 4 area tertutup di dalam graf dan 1 area terbuka di luar graf).
+
+*Maka, terdapat **5 Jalur Independen** dalam proses login.*
 
 ### D. Jalur Independen (Independent Paths)
-1. **Jalur 1**: 1 - 2 (Ya) - 3 (Ya) - 4 - Exit
-2. **Jalur 2**: 1 - 2 (Ya) - 3 (Tidak) - 5 - Exit
-3. **Jalur 3**: 1 - 2 (Tidak) - 6 (Tidak) - 17 - Exit
-4. **Jalur 4**: 1 - 2 (Tidak) - 6 (Ya) - 7 - 8 (Ya) - 9 - 17 - Exit
-5. **Jalur 5**: 1 - 2 (Tidak) - 6 (Ya) - 7 - 8 (Tidak) - 10 (Exception) - 16 - 17 - Exit
-6. **Jalur 6**: 1 - 2 (Tidak) - 6 (Ya) - 7 - 8 (Tidak) - 10 (Sukses) - 11 (Tidak) - 15 - 17 - Exit
-7. **Jalur 7**: 1 - 2 (Tidak) - 6 (Ya) - 7 - 8 (Tidak) - 10 (Sukses) - 11 (Ya) - 12 (Ya) - 13 - Exit
-8. **Jalur 8**: 1 - 2 (Tidak) - 6 (Ya) - 7 - 8 (Tidak) - 10 (Sukses) - 11 (Ya) - 12 (Tidak) - 14 - Exit
+Berdasarkan perhitungan CC sebanyak 5, berikut adalah 5 jalur independen yang menguji setiap kemungkinan logika:
+
+1. **Path 1 (Input Kosong)**: 
+   `1 -> 2 -> 3 -> 11`
+2. **Path 2 (User Tidak Ditemukan)**: 
+   `1 -> 2 -> 4 -> 5 -> 11`
+3. **Path 3 (Password Salah)**: 
+   `1 -> 2 -> 4 -> 6 -> 7 -> 11`
+4. **Path 4 (Login Sukses - Role Admin)**: 
+   `1 -> 2 -> 4 -> 6 -> 8 -> 9 -> 11`
+5. **Path 5 (Login Sukses - Role Kasir)**: 
+   `1 -> 2 -> 4 -> 6 -> 8 -> 10 -> 11`
 
 ---
 
