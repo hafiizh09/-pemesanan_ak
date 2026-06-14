@@ -1,117 +1,129 @@
 # Dokumen Perancangan: Use Case Diagram
 ## Sistem Pemesanan Kafe Berbasis QR Code (Pemesanan AK)
 
-Dokumen ini memetakan interaksi aktor terhadap sistem dalam bentuk **Use Case Diagram** beserta penjelasannya untuk keperluan dokumentasi proyek, Skripsi, atau Tugas Akhir.
+Dokumen ini memetakan interaksi aktor terhadap sistem dalam bentuk **Use Case Diagram** dengan alur terurut dari atas ke bawah (*Start* hingga *Exit*) seperti contoh yang diberikan.
 
 ---
 
-### 📊 Use Case Diagram (Mermaid)
+### 📊 Use Case Diagram dengan Alur Aliran (Flowchart Layout)
 
-Berikut adalah visualisasi use case diagram menggunakan format Mermaid Flowchart. Bentuk kapsul/oval `([ ... ])` digunakan untuk merepresentasikan Use Case, dan garis menghubungkan Aktor dengan fungsi sistem yang dapat mereka jalankan.
+Berikut adalah visualisasi Use Case Diagram. Semua fungsi utama diurutkan secara vertikal dari proses awal hingga akhir transaksi, dengan Pelanggan di sisi kiri, serta Kasir & Admin di sisi kanan.
 
 ```mermaid
 flowchart LR
     %% Pengaturan Gaya Node Aktor
-    classDef actorStyle fill:#fff,stroke:#333,stroke-width:2px;
+    classDef actorStyle fill:#ffffff,stroke:#333,stroke-width:2px;
+    classDef useCaseStyle fill:#fdfbf7,stroke:#171717,stroke-width:1.5px;
     
-    %% Aktor Utama
-    subgraph Actors [Aktor]
-        Admin["👤 Administrator"]
-        Kasir["👤 Kasir"]
+    %% Aktor Sisi Kiri
+    subgraph LeftActors [Aktor Kiri]
         Pelanggan["👤 Pelanggan"]
     end
     
-    %% Batasan Sistem (System Boundary)
-    subgraph System [Sistem Pemesanan Kafe AK]
-        %% Use Cases
-        UC_Mulai(["1. Mulai"])
-        UC_ScanQR(["2. Scan QR Code Meja"])
-        UC_LihatMenu(["3. Lihat Menu & Kategori"])
-        UC_Keranjang(["4. Kelola Keranjang"])
-        UC_Checkout(["5. Checkout & Pilih Pembayaran"])
-        UC_UploadQRIS(["6. Upload Bukti QRIS"])
-        UC_PantauStatus(["7. Pantau Status Pesanan"])
+    %% Batasan Sistem (System Boundary) & Urutan Use Case (Tengah)
+    subgraph SystemBoundary [Sistem Pemesanan Kafe]
+        %% Pusat Use Case (Urutan Alur Vertikal)
+        UC_Start(["Start"])
+        UC_ScanQR(["Scan QR Code"])
+        UC_PilihMenu(["Pilih & Filter Menu"])
+        UC_Keranjang(["Kelola Keranjang"])
+        UC_Checkout(["Checkout Pesanan"])
+        UC_MetodeBayar(["Pilih Metode Bayar"])
         
-        UC_Login(["8. Login Sistem"])
-        UC_Shift(["9. Manajemen Shift Kasir"])
-        UC_KelolaPesanan(["10. Kelola Pesanan Masuk"])
+        %% Sub-Use Case dari Metode Bayar
+        UC_BayarCash(["Bayar Tunai / Cash"])
+        UC_BayarQRIS(["Bayar QRIS (Statis)"])
+        UC_UploadQRIS(["Upload Bukti Transfer"])
         
-        UC_CRUD_Menu(["11. Kelola Menu (CRUD)"])
-        UC_CRUD_Kategori(["12. Kelola Kategori (CRUD)"])
-        UC_CRUD_Meja(["13. Kelola Meja & QR (CRUD)"])
-        UC_CRUD_Kasir(["14. Kelola Staf/Kasir (CRUD)"])
-        UC_Laporan(["15. Laporan Penjualan"])
+        UC_Verifikasi(["Verifikasi Pembayaran"])
+        UC_ProsesPesanan(["Proses & Siapkan Pesanan"])
+        UC_Exit(["Exit"])
+
+        %% Panah Alur Proses dari Atas ke Bawah
+        UC_Start --> UC_ScanQR
+        UC_ScanQR --> UC_PilihMenu
+        UC_PilihMenu --> UC_Keranjang
+        UC_Keranjang --> UC_Checkout
+        UC_Checkout --> UC_MetodeBayar
         
-        UC_Selesai(["16. Selesai"])
+        UC_MetodeBayar --> UC_BayarCash
+        UC_MetodeBayar --> UC_BayarQRIS
+        UC_BayarQRIS --> UC_UploadQRIS
+        
+        UC_BayarCash --> UC_Verifikasi
+        UC_UploadQRIS --> UC_Verifikasi
+        
+        UC_Verifikasi --> UC_ProsesPesanan
+        UC_ProsesPesanan --> UC_Exit
+    end
+    
+    %% Aktor Sisi Kanan
+    subgraph RightActors [Aktor Kanan]
+        Kasir["👤 Kasir"]
+        Admin["👤 Admin / Owner"]
     end
 
-    %% Hubungan Pelanggan (Customer)
-    Pelanggan --> UC_Mulai
+    %% Hubungan Pelanggan (Sisi Kiri)
+    Pelanggan --> UC_Start
     Pelanggan --> UC_ScanQR
-    Pelanggan --> UC_LihatMenu
+    Pelanggan --> UC_PilihMenu
     Pelanggan --> UC_Keranjang
     Pelanggan --> UC_Checkout
+    Pelanggan --> UC_MetodeBayar
     Pelanggan --> UC_UploadQRIS
-    Pelanggan --> UC_PantauStatus
-    Pelanggan --> UC_Selesai
+    Pelanggan --> UC_Exit
 
-    %% Hubungan Kasir (Cashier)
-    Kasir --> UC_Mulai
-    Kasir --> UC_Login
-    Kasir --> UC_Shift
-    Kasir --> UC_KelolaPesanan
-    Kasir --> UC_Selesai
+    %% Hubungan Kasir (Sisi Kanan)
+    Kasir --> UC_Start
+    Kasir --> UC_MetodeBayar
+    Kasir --> UC_Verifikasi
+    Kasir --> UC_ProsesPesanan
+    Kasir --> UC_Exit
 
-    %% Hubungan Admin (Administrator)
-    Admin --> UC_Mulai
-    Admin --> UC_Login
-    Admin --> UC_CRUD_Menu
-    Admin --> UC_CRUD_Kategori
-    Admin --> UC_CRUD_Meja
-    Admin --> UC_CRUD_Kasir
-    Admin --> UC_Laporan
-    Admin --> UC_Selesai
+    %% Hubungan Admin / Owner (Sisi Kanan)
+    Admin --> UC_Start
+    Admin --> UC_Verifikasi
+    Admin --> UC_ProsesPesanan
+    Admin --> UC_Exit
 
-    %% Hubungan Antar Use Case (Extend/Include)
-    UC_Checkout -.->|<< include >>| UC_ScanQR
-    UC_UploadQRIS -.->|<< extend >>| UC_Checkout
-
-    %% Styling
-    class Admin,Kasir,Pelanggan actorStyle;
+    %% Aplikasi Gaya Visual
+    class Pelanggan,Kasir,Admin actorStyle;
+    class UC_Start,UC_ScanQR,UC_PilihMenu,UC_Keranjang,UC_Checkout,UC_MetodeBayar,UC_BayarCash,UC_BayarQRIS,UC_UploadQRIS,UC_Verifikasi,UC_ProsesPesanan,UC_Exit useCaseStyle;
 ```
 
 ---
 
-### 📝 Deskripsi Aktor & Hubungan Use Case
+### 📝 Penjelasan Detail Alur Use Case
 
-Di bawah ini adalah penjelasan lengkap mengenai peran masing-masing aktor beserta Use Case yang dapat mereka akses:
+Sesuai dengan bagan alur di atas, sistem bekerja secara berurutan sebagai berikut:
 
-#### 1. Pelanggan (Customer)
-Akses sistem bersifat *self-service* tanpa login, dimulai dari memindai kode QR fisik di meja.
-*   **Mulai**: Memulai aktivitas pemesanan di kafe.
-*   **Scan QR Code Meja**: Memindai QR Code yang berada di meja untuk mendapatkan akses menu dinamis sesuai nomor meja.
-*   **Lihat Menu & Kategori**: Menjelajahi daftar makanan dan minuman yang dikelompokkan per kategori.
-*   **Kelola Keranjang**: Menambah item, mengurangi item, serta menambahkan catatan khusus (misal: *"Es sedikit"*).
-*   **Checkout & Pilih Pembayaran**: Menyelesaikan pesanan dan memilih metode pembayaran (Tunai/Cash atau QRIS).
-*   **Upload Bukti QRIS**: Mengunggah foto bukti pembayaran jika memilih pembayaran QRIS mandiri.
-*   **Pantau Status Pesanan**: Melihat pembaruan status pemrosesan pesanan secara real-time.
-*   **Selesai**: Sesi pemesanan berakhir setelah pembayaran dikonfirmasi dan pesanan diterima.
-
-#### 2. Kasir (Cashier)
-Staf operasional yang bertanggung jawab atas proses transaksi harian di kafe.
-*   **Mulai**: Datang ke toko dan memulai sesi kerja.
-*   **Login Sistem**: Masuk ke aplikasi kasir menggunakan username dan password terdaftar.
-*   **Manajemen Shift Kasir**: Membuka shift di awal kerja dan menutup shift di akhir kerja untuk rekapitulasi penjualan.
-*   **Kelola Pesanan Masuk**: Menerima/menolak pesanan baru, memproses pesanan ke dapur, serta mengonfirmasi pelunasan pembayaran cash/bukti QRIS.
-*   **Selesai**: Mengakhiri shift, melakukan logout, dan menyelesaikan sesi kerja.
-
-#### 3. Administrator (Admin)
-Pengelola dengan hak akses tertinggi yang bertanggung jawab atas manajemen data master dan analisis.
-*   **Mulai**: Memulai pengelolaan sistem.
-*   **Login Sistem**: Autentikasi keamanan untuk masuk ke dashboard admin.
-*   **Kelola Menu (CRUD)**: Menambah, mengubah, menghapus menu makanan/minuman, mengunggah gambar menu, serta mengubah status ketersediaan.
-*   **Kelola Kategori (CRUD)**: Mengatur kategori menu (seperti Coffee, Non-Coffee, Snacks).
-*   **Kelola Meja & QR (CRUD)**: Mendaftarkan meja baru serta men-generate / mengunduh QR Code meja untuk dipasang secara fisik.
-*   **Kelola Staf/Kasir (CRUD)**: Mengelola akun login staf kasir.
-*   **Laporan Penjualan**: Melihat, memfilter berdasarkan tanggal, dan mencetak/rekapitulasi data riwayat penjualan per shift.
-*   **Selesai**: Keluar dari dashboard sistem dan menyelesaikan sesi manajemen.
+1.  **Start**
+    *   **Aktor**: Pelanggan, Kasir, Admin.
+    *   **Deskripsi**: Titik awal masuknya seluruh pengguna ke dalam sistem operasional kafe.
+2.  **Scan QR Code**
+    *   **Aktor**: Pelanggan.
+    *   **Deskripsi**: Pelanggan memindai QR Code di meja untuk mendapatkan parameter meja di URL.
+3.  **Pilih & Filter Menu**
+    *   **Aktor**: Pelanggan.
+    *   **Deskripsi**: Pelanggan menjelajahi katalog menu berdasarkan kategori.
+4.  **Kelola Keranjang**
+    *   **Aktor**: Pelanggan.
+    *   **Deskripsi**: Pelanggan menambah atau mengurangi kuantitas item dan menyisipkan catatan khusus.
+5.  **Checkout Pesanan**
+    *   **Aktor**: Pelanggan.
+    *   **Deskripsi**: Pelanggan mengunci pesanan dan mengirimkannya ke database backend.
+6.  **Pilih Metode Bayar**
+    *   **Aktor**: Pelanggan, Kasir.
+    *   **Deskripsi**: Menentukan apakah pembayaran akan diselesaikan langsung dengan uang tunai ke kasir atau dengan metode scan QRIS.
+7.  **Bayar Tunai / Cash & Bayar QRIS (Statis)**
+    *   Jika **QRIS**: Pelanggan melompat ke Use Case **Upload Bukti Transfer** (Bukti pembayaran).
+    *   Jika **Tunai**: Pelanggan langsung ke meja kasir untuk penyelesaian.
+8.  **Verifikasi Pembayaran**
+    *   **Aktor**: Kasir, Admin.
+    *   **Deskripsi**: Kasir atau Admin memeriksa uang fisik yang diterima atau gambar bukti transfer QRIS yang diunggah oleh pelanggan untuk menandai status pesanan menjadi `Paid`.
+9.  **Proses & Siapkan Pesanan**
+    *   **Aktor**: Kasir, Admin.
+    *   **Deskripsi**: Status pesanan diubah ke `Diproses` (dapur menyiapkan pesanan) lalu menjadi `Selesai` saat disajikan.
+10. **Exit**
+    *   **Aktor**: Pelanggan, Kasir, Admin.
+    *   **Deskripsi**: Pelanggan meninggalkan kafe dan kasir/admin menutup shift penjualan mereka.
